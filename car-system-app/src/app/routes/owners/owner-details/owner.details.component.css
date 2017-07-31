@@ -1,0 +1,33 @@
+.description-block {
+  position: relative;
+  display: inline-block;
+  width: 50%;
+  top: 20px;
+  border: solid 2px chocolate;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: solid 2px orange;
+  border-radius: 10px;
+}
+
+img {
+  max-width: 480px;
+  max-height: 580px;  
+  width: auto;
+  height: auto;
+}
+
+h1 {
+  text-align: center;
+}

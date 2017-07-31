@@ -1,0 +1,18 @@
+<h1>OWNER DETAILS</h1>
+<div class='description-block' *ngIf="ownerDetails">
+  <p><img src={{ownerDetails.image}}/></p>
+  <p><strong>Name: </strong>{{ownerDetails.name}}</p>
+  <div *ngIf="ownerDetails?.ownerCars.length > 0">
+    <h3>Owner Cars:</h3>
+    <ul>
+      <li *ngFor="let car of ownerDetails.ownerCars">
+        <img src="{{car?.image}}" alt="car?.owner">
+        <p><strong>Make: </strong>{{car?.make}}</p>
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="ownerDetails.ownerCars.length === 0">
+    <strong>No Cars Available</strong>
+  </div>
+  <button class="btn btn-primary" (click)="goBack()">Go Back</button>
+</div>

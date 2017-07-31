@@ -1,0 +1,24 @@
+<h1>ALL CARS</h1>
+<div *ngIf="!availableCars">
+  <h2>No Cars Available</h2>
+</div>
+<div class='cars-block' *ngIf="cars">
+  <h3>Choose sort criteria:</h3>
+  <button class="btn btn-danger" (click)="sortByMake()">By Make</button>
+  <button class="btn btn-warning" (click)="sortByOwner()">By Owner</button>
+  <button class="btn btn-primary" (click)="sortByDate()">By Date of creation</button>
+  <ul>
+    <li *ngFor="let car of cars">
+      <img src={{car.image}} alt={{car.model}}>
+      <h3><strong>Car make: </strong>{{car.make}}</h3>
+      <p><strong>Car model: </strong>{{car.model}}</p>
+      <p><a routerLink="/cars/details/{{car.id}}">Car Details</a></p>
+    </li>
+  </ul>
+</div>
+<div>
+  <button class="btn btn-primary" (click)="goToPrevPage()">Prev</button>
+  <button class="btn btn-primary" (click)="goToNextPage()">Next</button>
+</div>
+
+    

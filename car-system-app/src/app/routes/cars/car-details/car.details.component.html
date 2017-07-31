@@ -1,0 +1,10 @@
+<h1>CAR DETAILS</h1>
+<div class='description-block' *ngIf="carDetails">
+  <p><img src={{carDetails.image}}/></p>
+  <p><strong>Make: </strong>{{carDetails.make}}</p>
+  <p><strong>Model: </strong>{{carDetails.model}}</p>          
+  <p><strong>Description: </strong>{{carDetails.description}}</p>
+  <p><strong>Owner: </strong>{{carDetails.owner}}</p>
+  <p><strong>Engine: </strong>{{carDetails.engine}}</p>
+  <p><strong>Price: </strong>{{carDetails.price}}</p> 
+<div>

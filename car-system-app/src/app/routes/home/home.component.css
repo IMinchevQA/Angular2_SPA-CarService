@@ -1,0 +1,28 @@
+@import '~bootstrap/dist/css/bootstrap.css';
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  margin-bottom: 20px;
+  border: solid 2px gray;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+img {
+  max-width: 320px;
+  max-height: 320px;  
+  width: auto;
+  height: auto;
+}
+
+.cars-block {
+  position: relative;
+  display: inline-block;
+  width: 50%;
+  top: 20%;
+  padding: 10px;  
+  text-align: left;
+}

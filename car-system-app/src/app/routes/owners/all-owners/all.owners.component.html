@@ -1,0 +1,17 @@
+<h1>ALL OWNERS</h1>
+<div *ngIf="!availableOwners">
+  <h2>No Owners Available</h2>
+</div>
+<div class='owners-block' *ngIf="availableOwners">
+  <ul>
+    <li *ngFor="let owner of owners">
+      <img src={{owner?.image}} alt={{owner?.name}}>
+      <h3><strong>Owner name: </strong>{{owner?.name}}</h3>
+      <p><a routerLink="/owners/{{page}}/{{owner.name}}/{{owner.id}}">Owner Details</a></p>
+    </li>
+  </ul>
+</div>
+<div>
+  <button class="btn btn-primary" (click)="goToPrevPage()">Prev</button>
+  <button class="btn btn-primary" (click)="goToNextPage()">Next</button>
+</div>
