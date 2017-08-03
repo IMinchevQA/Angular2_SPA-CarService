@@ -19,7 +19,7 @@ import { NavbarComponent } from './../nav/navbar.component';
 import { CreateCarComponent } from './cars/car-create/create.car.component';
 import { EditCarComponent } from './cars/car-edit/edit.car.component';
 import { CreateOwnerComponent } from './owners/owner-create/create.owner.component';
-import { CarEngineInfoPipe } from './cars/car-details/car.engine.info.pipe'
+import { CarDateFormatPipe } from './cars/car-details/car.date.format.pipe';
 
 const routes: Routes = [
   { path: '', component: HomeComponent } ,
@@ -51,7 +51,7 @@ const routes: Routes = [
     CreateCarComponent,
     EditCarComponent,
     CreateOwnerComponent,
-    CarEngineInfoPipe
+    CarDateFormatPipe
   ],
   imports: [HttpModule, CommonModule, RouterModule.forRoot(routes), FormsModule],
   providers: [CarsService, OwnersService, AuthService, ToastrService],
