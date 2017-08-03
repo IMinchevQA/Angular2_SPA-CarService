@@ -5,7 +5,8 @@ import { NgModule } from '@angular/core';
 import { AppRoutesModule } from './routes/routes.module';
 
 import { AppComponent } from './app.component';
-import { HomeComponent } from './routes/home/home.component'
+import { HomeComponent } from './routes/home/home.component';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,7 @@ import { HomeComponent } from './routes/home/home.component'
     BrowserModule,
     AppRoutesModule
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

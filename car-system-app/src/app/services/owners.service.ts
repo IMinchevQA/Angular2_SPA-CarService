@@ -1,14 +1,28 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { OwnerModel } from './owner.model';
-import { CarModel } from '../cars/car.model';
+import { Http, Headers } from '@angular/http';
+import { OwnerModel } from '../models/owner.model';
+import { CarModel } from '../models/car.model';
 import 'rxjs/add/operator/toPromise';
 
 const baseUrl: string = 'http://localhost:5000/owners'
 
 @Injectable()
-export class OwnersData {
+export class OwnersService {
+  private headers = new Headers({
+    "Content-Type": "application/json"
+  })
   constructor (private http: Http) { }
+
+  createOwner(formValues) {
+    const url = `${baseUrl}/create`
+    console.log(url)
+    let postCar = JSON.stringify(formValues);
+    return this.http
+    .post(url, postCar, { headers: this.headers })
+    .toPromise()
+    .then(response => response.json())
+    .catch(err => this.handleError)
+  }
 
   getOwners(page: number): Promise<Array<OwnerModel>> {
     let urlGetOwners = `${baseUrl}/all?page=${page}`;
@@ -42,6 +56,11 @@ export class OwnersData {
         console.log(err)
         return new OwnerModel(null, null, null, null);
       })
+  }
+
+  private handleError(error: any): Promise<any> {
+    console.error('An error occurred', error); // for demo purposes only
+    return Promise.reject(error.message || error)
   }
 }
 

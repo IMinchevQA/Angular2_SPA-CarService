@@ -1,0 +1,46 @@
+<h1>EDIT CAR</h1>
+<form *ngIf="car" style="margin: 0 auto;width: 50%;" #editCarForm="ngForm" (ngSubmit)="editCar(editCarForm.value)" autocomplete="on">
+  <div class="form-group row">
+    <label for="make" class="col-md-3 col-form-label">Make</label>
+    <div class="col-md-6">
+      <input [(ngModel)]="car.make" class="form-control" type="text" id="make" name="make" required>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="model" class="col-md-3 col-form-label">Model</label>
+    <div class="col-md-6">
+      <input [(ngModel)]="car.model" type="text" id="model" class="form-control" name="model" required>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="image" class="col-md-3 col-form-label">Image</label>
+    <div class="col-md-6">
+      <input [(ngModel)]="car.image" type="text" id="image" class="form-control" name="image" required>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="description" class="col-md-3 col-form-label">Description</label>
+    <div class="col-md-6">
+      <input [(ngModel)]="car.description" type="text" id="description" class="form-control" name="description" required>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="engine" class="col-md-3 col-form-label">Engine</label>
+    <div class="col-md-6">
+      <input [(ngModel)]="car.engine" type="text" id="engine" class="form-control" name="engine" min=0 required>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="price" class="col-md-3 col-form-label">Price</label>
+    <div class="col-md-6">
+      <input [(ngModel)]="car.price" type="number" id="price" class="form-control" name="price" min="1000" required #price="ngModel">
+    </div>
+  </div>
+  <div *ngIf="price.errors && (price.dirty || price.touched)" class="alert alert-danger">
+    <div [hidden]="!price.errors.required">
+      Price is required with min value of 1000 USD
+    </div>
+  </div>
+  <button [disabled]="editCarForm.form.invalid" type="submit" class="btn btn-warning">Edit</button>
+  <button (click)=goBack() class="btn btn-success">Go back</button>
+</form>

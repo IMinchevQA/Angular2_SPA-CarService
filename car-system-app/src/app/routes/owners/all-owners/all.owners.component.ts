@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { OwnersData } from '../owners.data';
-import { OwnerModel } from '../owner.model';
+import { OwnersService } from '../../../services/owners.service';
+import { OwnerModel } from '../../../models/owner.model';
 
 @Component({
   selector: 'all-owners',
-  providers: [OwnersData],
   templateUrl: './all.owners.component.html',
   styleUrls: ['./all.owners.component.css']
 })
@@ -16,7 +15,7 @@ export class AllOwnersComponent implements OnInit {
   availableOwners: boolean = false;
 
   constructor(
-    private ownersDataService: OwnersData,
+    private ownersDataService: OwnersService,
     private route: ActivatedRoute,
     private router: Router
   ) { }

@@ -1,4 +1,4 @@
-export class CarModel {
+export class CarModel {  
   constructor(
     public id: string,
     public date: number,

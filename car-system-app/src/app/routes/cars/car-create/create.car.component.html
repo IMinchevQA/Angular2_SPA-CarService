@@ -1,0 +1,70 @@
+<h1>Create Car</h1>
+<form style="margin: 0 auto;width: 50%;" #createCarForm="ngForm" (ngSubmit)="createCar(createCarForm.value)" autocomplete="on">
+  <div class="form-group row">
+    <label for="make" class="col-md-3 col-form-label">Make</label>
+    <div class="col-md-6">
+      <input (ngModel)="make" id="make" class="form-control" type="text" name="make" required #make="ngModel">
+    </div>
+  </div>
+   <div *ngIf="make.errors && (make.durty || make.touched)" class="alert alert-danger">
+    <div [hidden]="!make.errors.required">
+      Make is required
+    </div>
+  </div> 
+  <div class="form-group row">
+    <label for="model" class="col-md-3 col-form-label">Model</label>
+    <div class="col-md-6">
+      <input (ngModel)="model" id="model" class="form-control" type="text" name="model" required #model="ngModel">
+    </div>
+  </div>
+  <div *ngIf="model.errors && (model.durty || model.touched)" class="alert alert-danger">
+    <div [hidden]="!model.errors.required">
+      Model is required
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="image" class="col-md-3 col-form-label">Image</label>
+    <div class="col-md-6">
+      <input (ngModel)="image" id="image" class="form-control" type="text" name="image" required #image="ngModel">      
+    </div>
+  </div>
+  <div *ngIf="image.errors && (image.durty || image.touched)" calss="alert alert-danger">
+    <div [hidden]="!image.errors.required">
+      Image is required
+    </div>
+  </div>
+  <div class="form-group row">`
+    <label for="description" class="col-md-3 col-form-label">Description</label>
+      <div class="col-md-6">
+        <textarea rows="3" cols="5" (ngModel)="description" id="description" class="form-control" name="description" required #description="ngModel"></textarea>        
+      </div>
+  </div>
+  <div *ngIf="description.errors && (description.dirty || description.touched)" class="alert alert-danger">
+    <div [hidden]="!description.errors.required">
+      Description is required
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="engine" class="col-md-3 col-form-label">Engine</label>
+      <div class="col-md-6">
+        <input (ngModel)="engine" id="engine" class="form-control" type="text" name="engine" required #engine="ngModel" min=0>
+      </div>
+  </div>
+  <div *ngIf="engine.errors && (engine.dirty || engine.touched)" class="alert alert-danger">
+    <div [hidden]="!engine.errors.required">
+      Engine is required
+    </div>
+  </div>
+  <div class="form-group row"> 
+    <label for="price" class="col-md-3 col-form-label">Price</label>
+    <div class="col-md-6">
+      <input (ngModel)="price" id="price" class="form-control" type="number" name="price" required #price="ngModel" min=1000>
+    </div>
+  </div>
+  <div *ngIf="price.errors && (price.dirty || price.touched)" class="alert alert-danger">
+    <div [hidden]="!price.errors.required">
+      Price is required with min value of 100000 USD
+    </div>
+  </div>
+  <button [disabled]="createCarForm.form.invalid" type="submit" class="btn btn-success">Create</button>
+</form>

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CarsData } from '../cars.data';
-import { CarModel } from '../car.model';
+import { CarsService } from '../../../services/cars.service';
+import { CarModel } from '../../../models/car.model';
 
 @Component({
   selector: 'all-cars',
-  providers: [CarsData],
+  // providers: [CarsService],
   templateUrl: './all.cars.component.html',
   styleUrls: ['./all.cars.component.css']
 })
@@ -15,7 +15,7 @@ export class AllCarsComponent implements OnInit {
   availableCars: boolean = false;
   
   constructor(
-    private carsDataService: CarsData,
+    private carsDataService: CarsService,
     private route: ActivatedRoute,
     private router: Router
   ) { }

@@ -1,4 +1,4 @@
-import { CarModel } from '../cars/car.model';
+import { CarModel } from '../models/car.model';
 
 export class OwnerModel {
   constructor(

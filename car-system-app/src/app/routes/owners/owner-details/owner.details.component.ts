@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { OwnersData } from './../owners.data';
-import { OwnerModel } from './../owner.model';
-import { CarsData } from './../../cars/cars.data';
-import { CarModel } from './../../cars/car.model';
+import { OwnersService } from './../../../services/owners.service';
+import { OwnerModel } from '../../../models/owner.model';
+import { CarsService } from '../../../services/cars.service';
+import { CarModel } from '../../../models/car.model';
 
 @Component({
   selector: 'owner-details',
-  providers: [OwnersData,CarsData],
   templateUrl: './owner.details.component.html',
   styleUrls: ['./owner.details.component.css']
 })
@@ -21,8 +20,8 @@ export class OwnerDetailsComponent implements OnInit {
   paramPage: number;
 
   constructor (
-    private ownersDataService: OwnersData,
-    private carsDataService: CarsData,
+    private ownersDataService: OwnersService,
+    private carsDataService: CarsService,
     private router: Router, 
     private route: ActivatedRoute) {
     this.paramId = this.route.snapshot.paramMap.get('id');

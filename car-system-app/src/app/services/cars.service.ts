@@ -1,13 +1,38 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { CarModel } from './car.model';
+import { Http, Headers} from '@angular/http';
+import { CarModel } from '../models/car.model';
 import 'rxjs/add/operator/toPromise';
 const baseUrl: string = 'http://localhost:5000/cars'
 
 @Injectable()
 
-export class CarsData {  
+export class CarsService
+ {
+   private headers = new Headers({
+    "Content-Type": "application/json"
+  })
   constructor (private http: Http) { }
+
+  updateCar(formValues) {
+    const idEditCar = formValues.id;    
+    const url = `${baseUrl}/edit/${idEditCar}`;
+    let postCar = JSON.stringify(formValues);
+    return this.http
+      .post(url, postCar, { headers: this.headers })
+      .toPromise()
+      .then(response => response.json())
+      .catch(err => this.handleError);
+  }
+
+  createCar(formValues) {
+    const url = `${baseUrl}/create`
+    let postCar = JSON.stringify(formValues);
+    return this.http
+    .post(url, postCar, { headers: this.headers })
+    .toPromise()
+    .then(response => response.json())
+    .catch(err => this.handleError)
+  }
 
   getSixCars(): Promise<Array<CarModel>> {
     let urlGetSixCars = `${baseUrl}/getSixCars`;
@@ -17,7 +42,7 @@ export class CarsData {
       .then(resp => {
         let resolveCars = JSON.parse(resp['_body']).map(car => {
           return castCarToCarModel(car);
-        })
+        })        
         return resolveCars;
       })
       .catch(err => {
@@ -53,6 +78,11 @@ export class CarsData {
       console.log(err);
       return new CarModel(null, null, null, null, null, null, null, null, null);
     })
+  }
+
+  private handleError(error: any): Promise<any> {
+    console.error('An error occurred', error); // for demo purposes only
+    return Promise.reject(error.message || error)
   }
 }
 
