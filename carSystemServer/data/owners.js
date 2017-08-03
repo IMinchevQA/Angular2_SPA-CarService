@@ -1,4 +1,15 @@
 module.exports = {
+  save: (owner) => {
+    let id = owners.length + 1;
+    let newOwner = {
+      id,
+      date: Date.now() + id,
+      name: owner.name,
+      image: owner.image
+    }
+    owners.push(newOwner)
+    return newOwner
+  },
   all: (page) => {
     const pageSize = 3
     let startIndex = (page - 1) * pageSize

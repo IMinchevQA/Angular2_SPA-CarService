@@ -4,6 +4,29 @@ const carsData = require('../data/cars')
 
 const router = new express.Router()
 
+router.post('/edit/:id', (req, res) => {
+  const carReq = req.body
+  const idReq = req.params.id
+
+  let responseCar = carsData.updateCar(carReq, +idReq)
+  return res.status(200).json({
+    success: true,
+    message: 'Car edited successfully!',
+    responseCar
+  })
+})
+
+router.post('/create', (req, res) => {
+  const carReq = req.body
+
+  let responseCar = carsData.save(carReq)
+  return res.status(200).json({
+    success: true,
+    message: 'Car added successfully!', 
+    responseCar
+  })
+})
+
 router.get('/getSixCars', (req, res) => {
   const cars = carsData.sixCars()
   res.status(200).json(cars)
@@ -15,8 +38,8 @@ router.get('/all', (req, res) => {
 })
 
 router.get('/details/:id', (req, res) => {
-  const id = req.params.id
-  const car = carsData.findById(+id)
+  const id = Number(req.params.id)
+  const car = carsData.findById(id)
   if (!car) {
     return res.status(200).json({
       success: false,

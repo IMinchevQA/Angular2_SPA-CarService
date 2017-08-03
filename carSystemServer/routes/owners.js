@@ -4,6 +4,17 @@ const ownersData = require('../data/owners')
 const carsData = require('../data/cars')
 const router = new express.Router()
 
+router.post('/create', (req, res) => {
+  const ownerReq = req.body
+
+  let responseOwner = ownersData.save(ownerReq)
+  return res.status(200).json({
+    success: true,
+    message: 'Owner added successfully!', 
+    responseOwner
+  })
+})
+
 router.get('/all', (req, res) => {
   const page = parseInt(req.query.page) || 1
   const cars = ownersData.all(page)
