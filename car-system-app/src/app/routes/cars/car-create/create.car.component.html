@@ -47,12 +47,12 @@
   <div class="form-group row">
     <label for="engine" class="col-md-3 col-form-label">Engine</label>
       <div class="col-md-6">
-        <input (ngModel)="engine" id="engine" class="form-control" type="text" name="engine" required #engine="ngModel" min=0>
+        <input (ngModel)="engine" id="engine" class="form-control" type="text" name="engine" pattern=".{3,}" required #engine="ngModel" min=0>      
       </div>
   </div>
   <div *ngIf="engine.errors && (engine.dirty || engine.touched)" class="alert alert-danger">
-    <div [hidden]="!engine.errors.required">
-      Engine is required
+    <div [hidden]="!engine.errors.required && !engine.errors.pattern">
+      Engine is required and must be at least 3 symbols long!!!
     </div>
   </div>
   <div class="form-group row"> 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CarsService } from '../../../services/cars.service';
+import { ToastrService } from '../../../services/common/toastr.service';
 import { CarModel } from '../../../models/car.model';
 
 @Component({
@@ -16,6 +17,7 @@ export class AllCarsComponent implements OnInit {
   
   constructor(
     private carsDataService: CarsService,
+    private toastrService: ToastrService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -47,13 +49,16 @@ export class AllCarsComponent implements OnInit {
   getCars(page: number): void {
     this.carsDataService
       .getCars(this.page)
-      .then(cars => {
-        this.cars = cars;
+      .then(response => {
+        this.cars = response;
         if (this.cars.length > 0) {
           this.availableCars = true;
         } else {
           this.availableCars = false;
         }
+      })
+      .catch(err=> {
+        this.toastrService.error(err || 'Sorry but unknown failure occured!');
       })
   }
 

@@ -5,11 +5,27 @@
       </div>
       <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-          <li><a routerLink= "/cars/all" routerLinkActive="active">All cars</a></li>
-          <li><a routerLink= "/cars/create" routerLinkActive="active">Create Car</a></li>
-          <li><a routerLink= "/owners/all" routerLinkActive="active">All owners</a></li>
-          <li><a routerLink= "/owners/create" routerLinkActive="active">Create Owner</a></li>
+          <li><a routerLink= "/cars/all" routerLinkActive="active">Cars</a></li>
+          <li><a routerLink= "/owners/all" routerLinkActive="active">Owners</a></li>
+          <li *ngIf="auth.isUserAuthenticated()"><a routerLink= "/cars/create" routerLinkActive="active">Create Car</a></li>
+          <li *ngIf="auth.isUserAuthenticated()"><a routerLink= "/owners/create" routerLinkActive="active">Create Owner</a></li>
         </ul>
+        <div class="navbar-header navbar-right">
+          <ul class="nav navbar-nav">
+            <li *ngIf="!auth.isUserAuthenticated()">
+              <a routerLink="/users/register" routerLinkActive="active">Register</a>
+            </li>
+            <li *ngIf="!auth.isUserAuthenticated()" >
+              <a routerLink="users/login" routerLinkActive="active">Login</a>
+            </li>
+            <li *ngIf="auth.isUserAuthenticated()">
+              <a routerLink="users/logout" routerLinkActive="active">Logout</a>
+            </li>
+            <li *ngIf="auth.isUserAuthenticated()">
+              <a routerLink="users/profile/{{auth.getUser().name}}/{{auth.getUser().id}}">Welcome {{auth.getUser().name}}</a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </nav>

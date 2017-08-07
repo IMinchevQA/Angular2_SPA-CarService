@@ -17,7 +17,6 @@ export class HomeComponent implements OnInit {
     this.carsDataService
       .getSixCars()
       .then(cars => {
-        console.log(cars)
         this.cars = cars.sort((car1, car2) => Number(car1.id) - Number(car2.id)); // cars sorted by id in ascending order due to the lack of date parameter
       })
   }

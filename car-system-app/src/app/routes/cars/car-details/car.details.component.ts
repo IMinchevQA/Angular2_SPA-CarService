@@ -17,12 +17,11 @@ export class CarDetailsComponent implements OnInit {
 
   constructor (
     private carsDataService: CarsService, 
+    private toastrService: ToastrService,
     private route: ActivatedRoute, 
-    private router: Router,
-    private toastr: ToastrService) {
+    private router: Router) {
     this.paramId = this.route.snapshot.paramMap.get('id');
-    this.paramPage = this.route.snapshot.paramMap.get('page');
-    
+    this.paramPage = this.route.snapshot.paramMap.get('page');    
   }
   
   ngOnInit(): void {
@@ -32,7 +31,13 @@ export class CarDetailsComponent implements OnInit {
         if (car.id) {
           this.carDetails = car;
         } else {
-          this.toastr.error('No car available with this id!')
+          this.toastrService.error('No car available with this id!')
+        }
+      })
+      .catch(err=> {
+        this.toastrService.error(err || 'Sorry but unknown failure occured!');
+        if (err === 'Unauthorized') {
+          this.router.navigate(['users/login']);
         }
       })
   }

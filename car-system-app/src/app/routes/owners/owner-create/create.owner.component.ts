@@ -12,19 +12,22 @@ export class CreateOwnerComponent {
   constructor (
     private ownerDataService: OwnersService,
     private router: Router,
-    private auth: AuthService,
-    private toastr: ToastrService
+    private toastrService: ToastrService
   ) { }
   createOwner(formValues): void {
       this.ownerDataService
         .createOwner(formValues)
         .then(data => {
           if (data.success) {
-            this.toastr.success(data.message);
+            this.toastrService.success(data.message);
             this.router.navigate(['/owners/all']);      
           } else {
-            this.toastr.error(data.message);
+            this.toastrService.error(data.message);
           }
+        })
+        .catch(err=> {
+          this.toastrService.error(err || 'Sorry but unknown failure occured!');
+          this.router.navigate(['users/login']);
         })
     }
 }

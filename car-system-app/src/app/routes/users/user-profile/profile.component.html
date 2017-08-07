@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-2 col-md-2">
+      <img src="{{profile?.image ? profile.image: defaultProfile.image}}" alt="" class="img-rounded img-responsive" />
+    </div>
+    <div class="col-sm-4 col-md-4">
+      <h3>{{auth.getUser().name}}</h3>
+      <p><span title="Source Title">{{profile?.location ? profile.location: defaultProfile.location}}<i class="glyphicon glyphicon-map-marker"></i></span>
+      </p>
+      <p><i class="glyphicon glyphicon-book"></i> Biography: {{profile?.biography ? profile.biography: defaultProfile.biography}}</p>
+      <p><a routerLink='/users/profile/edit/{{auth.getUser().name}}/{{auth.getUser().id}}' class="btn btn-warning">Edit profile</a></p>
+
+    </div>
+  </div>

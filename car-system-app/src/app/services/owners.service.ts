@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
+import { AuthService } from '../services/auth.service';
 import { OwnerModel } from '../models/owner.model';
 import { CarModel } from '../models/car.model';
 import 'rxjs/add/operator/toPromise';
@@ -8,26 +9,24 @@ const baseUrl: string = 'http://localhost:5000/owners'
 
 @Injectable()
 export class OwnersService {
-  private headers = new Headers({
-    "Content-Type": "application/json"
-  })
-  constructor (private http: Http) { }
+  constructor (
+    private http: Http,
+    private authService: AuthService) { }
 
   createOwner(formValues) {
-    const url = `${baseUrl}/create`
-    console.log(url)
-    let postCar = JSON.stringify(formValues);
+    const url = `${baseUrl}/create`;
+    let postOwner = JSON.stringify(formValues);
     return this.http
-    .post(url, postCar, { headers: this.headers })
+    .post(url, postOwner, { headers: this.authService.getHeaders() })
     .toPromise()
     .then(response => response.json())
-    .catch(err => this.handleError)
+    .catch(err => this.handleError(err))
   }
 
   getOwners(page: number): Promise<Array<OwnerModel>> {
     let urlGetOwners = `${baseUrl}/all?page=${page}`;
     return this.http
-      .get(urlGetOwners)
+      .get(urlGetOwners, { headers: this.authService.getHeaders() })
       .toPromise()
       .then(resp => {
         let resolveOwners = JSON.parse(resp['_body']).map(owner => {
@@ -35,32 +34,24 @@ export class OwnersService {
         })
         return resolveOwners
       })
-      .catch(err => {
-        console.log(err);
-        let arrErr = [];
-        arrErr.push(new OwnerModel(null, null, null, null));
-        return arrErr;
-      })
+      .catch(err => this.handleError(err))
   }
 
   getOwnerDetails (id: number, name: string): Promise<OwnerModel> {
     let urlGetOwnerDetails = `${baseUrl}/details/${name}/${id}`;
     return this.http
-      .get(urlGetOwnerDetails)
+      .get(urlGetOwnerDetails, { headers: this.authService.getHeaders() })
       .toPromise()
       .then(resp => {
         let resolveOwner = castOwnerToOwnerModel(JSON.parse(resp['_body']));
         return resolveOwner;
       })
-      .catch(err => {
-        console.log(err)
-        return new OwnerModel(null, null, null, null);
-      })
+      .catch(err => this.handleError(err))
   }
 
   private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
-    return Promise.reject(error.message || error)
+    console.error('An error occurred!', error); // for demo purposes only
+    return Promise.reject(error.message || error.statusText || error)
   }
 }
 

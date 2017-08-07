@@ -19,7 +19,7 @@ export class EditCarComponent {
     private router: Router,
     private auth: AuthService,
     private location: Location,
-    private toastr: ToastrService
+    private toastrService: ToastrService
   ) {
       this.paramId = this.route.snapshot.paramMap.get('id');
       this.paramPage = this.route.snapshot.paramMap.get('page');    
@@ -32,14 +32,14 @@ export class EditCarComponent {
         if (car.id) {
           this.car = car;
         } else {
-          this.toastr.error('No car available with this id!')
+          this.toastrService.error('No car available with this id!')
         }
       })
   }
 
   editCar(formValues) {
     if (formValues.price < 1000) {
-      this.toastr.error('Price cannot be lower than 1000USD');
+      this.toastrService.error('Price cannot be lower than 1000USD');
     } else {
       formValues.id = this.car.id;
       formValues.owner = this.car.owner;
@@ -47,11 +47,14 @@ export class EditCarComponent {
       .updateCar(formValues)
       .then(data => {
         if (data.success) {
-            this.toastr.success(data.message);
+            this.toastrService.success(data.message);
             this.router.navigate([`/cars/details/${this.paramPage}/${this.paramId}`]);      
           } else {
-            this.toastr.error(data.message);
+            this.toastrService.error(data.message);
           }
+      })
+      .catch(err=> {
+        this.toastrService.error(err || 'Sorry but unknown failure occured!');
       })
     }
   }

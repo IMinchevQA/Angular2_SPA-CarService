@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers} from '@angular/http';
+import { AuthService } from '../services/auth.service';
 import { CarModel } from '../models/car.model';
+import { CommentModel } from '../models/comment.model';
 import 'rxjs/add/operator/toPromise';
 const baseUrl: string = 'http://localhost:5000/cars'
 
@@ -8,36 +10,35 @@ const baseUrl: string = 'http://localhost:5000/cars'
 
 export class CarsService
  {
-   private headers = new Headers({
-    "Content-Type": "application/json"
-  })
-  constructor (private http: Http) { }
+  constructor (
+    private http: Http,
+    private authService: AuthService) { }
 
   updateCar(formValues) {
     const idEditCar = formValues.id;    
-    const url = `${baseUrl}/edit/${idEditCar}`;
+    const urlEditCar = `${baseUrl}/edit/${idEditCar}`;
     let postCar = JSON.stringify(formValues);
     return this.http
-      .post(url, postCar, { headers: this.headers })
+      .put(urlEditCar, postCar, { headers: this.authService.getHeaders() })
       .toPromise()
       .then(response => response.json())
-      .catch(err => this.handleError);
+      .catch(err => this.handleError(err));
   }
 
-  createCar(formValues) {
-    const url = `${baseUrl}/create`
+  createCar(formValues: FormData) {
+    const urlCreateCar = `${baseUrl}/create`
     let postCar = JSON.stringify(formValues);
     return this.http
-    .post(url, postCar, { headers: this.headers })
+    .post(urlCreateCar, postCar, { headers: this.authService.getHeaders() })
     .toPromise()
     .then(response => response.json())
-    .catch(err => this.handleError)
+    .catch(err => this.handleError(err))
   }
 
   getSixCars(): Promise<Array<CarModel>> {
     let urlGetSixCars = `${baseUrl}/getSixCars`;
     return this.http
-      .get(urlGetSixCars)
+      .get(urlGetSixCars, { headers: this.authService.getHeaders() })
       .toPromise()
       .then(resp => {
         let resolveCars = JSON.parse(resp['_body']).map(car => {
@@ -45,18 +46,13 @@ export class CarsService
         })        
         return resolveCars;
       })
-      .catch(err => {
-        console.log(err);
-        let arrErr = [];
-        arrErr.push(new CarModel(null, null, null, null, null, null, null, null, null));
-        return arrErr;
-      })
+      .catch(err => err => this.handleError(err))
   }
 
   getCars(page: number): Promise<Array<CarModel>> {
     let urlGetCars = `${baseUrl}/all?page=${page}`;
     return this.http
-      .get(urlGetCars)
+      .get(urlGetCars, { headers: this.authService.getHeaders() })
       .toPromise()
       .then(resp => {
         let resolveCars = JSON.parse(resp['_body']).map(car => {
@@ -64,25 +60,32 @@ export class CarsService
         })
         return resolveCars;
       })
+      .catch(err => this.handleError(err))
   }
 
   getCarDetails(id: string): Promise<CarModel> {
     let urlGetCarDetails = `${baseUrl}/details/${id}`;
     return this.http
-    .get(urlGetCarDetails)
+    .get(urlGetCarDetails, { headers: this.authService.getHeaders() })
     .toPromise()
     .then(car => {
       return castCarToCarModel(JSON.parse(car['_body']));
     })
-    .catch(err => {
-      console.log(err);
-      return new CarModel(null, null, null, null, null, null, null, null, null);
-    })
+    .catch(err => this.handleError(err))
   }
-
+  
+  createComment(commentBody: FormData, carId: string): Promise<CommentModel[]> {
+    const urlCreateComment = `${baseUrl}/comments/${carId}`;
+    let postComment = JSON.stringify(commentBody);
+    return this.http
+      .post(urlCreateComment, postComment, { headers: this.authService.getHeaders() })
+      .toPromise()
+      .then(resp => resp.json())
+      .catch(err => this.handleError(err))
+  }
   private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
-    return Promise.reject(error.message || error)
+    console.error('An error occurred!', error); // for demo purposes only
+    return Promise.reject(error.message || error.statusText || error)
   }
 }
 
@@ -96,6 +99,6 @@ function castCarToCarModel (car) {
   let description = car['description'];
   let engine = car['engine'];
   let price = car['price'];
-
-  return new CarModel(id, date, make, model, image, owner, description, engine, price);
+  let comments = car['comments'];
+  return new CarModel(id, date, make, model, image, owner, description, engine, price, comments);
 }

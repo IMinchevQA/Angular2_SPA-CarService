@@ -1,10 +1,10 @@
 const express = require('express')
-// const authCheck = require('../middleware/auth-check')
+const authCheck = require('../middleware/auth-check')
 const ownersData = require('../data/owners')
 const carsData = require('../data/cars')
 const router = new express.Router()
 
-router.post('/create', (req, res) => {
+router.post('/create', authCheck, (req, res) => {
   const ownerReq = req.body
 
   let responseOwner = ownersData.save(ownerReq)
@@ -21,7 +21,7 @@ router.get('/all', (req, res) => {
   res.status(200).json(cars)
 })
 
-router.get('/details/:name/:id', (req, res) => {
+router.get('/details/:name/:id', authCheck, (req, res) => {
   const name = req.params.name
   const page = parseInt(req.query.page) || 1
   const id = req.params.id

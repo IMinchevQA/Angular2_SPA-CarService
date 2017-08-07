@@ -9,5 +9,34 @@
   <p class="date-pipe"><strong>Date: </strong>{{carDetails.date | dateFormat}}</p>
   <p><strong>Price: </strong>{{carDetails.price}}</p> 
   <button class="btn btn-primary" (click)="goBack()">Go Back</button>
-  <span><a class="btn btn-warning" routerLink="/cars/edit/{{paramPage}}/{{carDetails?.id}}">Car Edit</a></span>
+  <a class="btn btn-warning" routerLink="/cars/edit/{{paramPage}}/{{carDetails?.id}}">Car Edit</a>
+  <a class="btn btn-default" routerLink="/cars/comments/{{carDetails?.id}}">Leave a comment</a>
+  <h2>Comments</h2>
+    <table *ngIf="carDetails?.comments && carDetails.comments.length > 0" class="table table-striped table-responsive table-bordered">  
+      <tbody *ngFor="let comment of carDetails.comments"> 
+        <tr>
+          <th>#{{comment.id}}<th>
+        </tr>        
+        <tr>
+          <th class="row-title">Title:</th>
+          <td class="row-content">{{comment.title}}</td>
+        </tr>
+        <tr>
+          <th class="row-title">Comment:</th>
+          <td class="row-content">{{comment.content}}</td>
+        </tr>
+        <tr>
+          <th class="row-title">Author:</th>
+          <td class="row-content">{{comment.author}}</td>
+        </tr>
+        <tr>
+          <th class="row-title">Date:</th>
+          <td class="row-content">{{comment.createdOn | dateFormat}}</td>
+        </tr>
+        <tr>----------------</tr>
+      </tbody>    
+    <table> 
+  <div *ngIf="!carDetails?.comments || (carDetails?.comments && carDetails.comments.length === 0)" class="car-comments car-nocomments">
+    <p>No comments available!</p>
+  </div> 
 <div>

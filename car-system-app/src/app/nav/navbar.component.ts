@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -6,5 +7,5 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './navbar.component.html'
 })
 export class NavbarComponent {
-  constructor (private auth: AuthService) { }
+  constructor (private auth: AuthService, private routerLinkActive: ActivatedRoute) { }
 }

@@ -4,7 +4,7 @@ const carsData = require('../data/cars')
 
 const router = new express.Router()
 
-router.post('/edit/:id', (req, res) => {
+router.put('/edit/:id', authCheck, (req, res) => {
   const carReq = req.body
   const idReq = req.params.id
 
@@ -16,7 +16,7 @@ router.post('/edit/:id', (req, res) => {
   })
 })
 
-router.post('/create', (req, res) => {
+router.post('/create', authCheck, (req, res) => {
   const carReq = req.body
 
   let responseCar = carsData.save(carReq)
@@ -31,13 +31,14 @@ router.get('/getSixCars', (req, res) => {
   const cars = carsData.sixCars()
   res.status(200).json(cars)
 })
+
 router.get('/all', (req, res) => {
   const page = parseInt(req.query.page) || 1
   const cars = carsData.all(page)
   res.status(200).json(cars)
 })
 
-router.get('/details/:id', (req, res) => {
+router.get('/details/:id', authCheck, (req, res) => {
   const id = Number(req.params.id)
   const car = carsData.findById(id)
   if (!car) {
@@ -77,12 +78,21 @@ router.get('/details/:id/reviews', authCheck, (req, res) => {
   res.status(200).json(response)
 })
 
-router.get('/mine', authCheck, (req, res) => {
-  const user = req.user.email
-
-  const cars = carsData.byUser(user)
-
-  res.status(200).json(cars)
+router.post('/comments/:id', authCheck, (req, res) => {
+  let reqId = req.params.id
+  let reqComment = req.body
+  let responseCar = carsData.createComment(reqComment, +reqId)
+  if (!responseCar) {
+    return res.status(200).json({
+      success: false,
+      message: 'Car does not exists!'
+    })
+  }
+  return res.status(200).json({
+    success: true,
+    message: 'Comment added successfuly.',
+    car: responseCar
+  })
 })
 
 module.exports = router

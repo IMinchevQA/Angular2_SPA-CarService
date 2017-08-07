@@ -18,7 +18,9 @@ module.exports = new PassportLocalStrategy({
     return done('E-mail already exists!')
   }
 
-  usersData.save(user)
+  
+  let responseUser = usersData.save(user)
+  let userByEmail = usersData.findByEmail(user.email)
 
-  return done(null)
+  return done(null, null, responseUser)
 })

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OwnersService } from '../../../services/owners.service';
+import { ToastrService } from '../../../services/common/toastr.service';
 import { OwnerModel } from '../../../models/owner.model';
 
 @Component({
@@ -16,6 +17,7 @@ export class AllOwnersComponent implements OnInit {
 
   constructor(
     private ownersDataService: OwnersService,
+    private toastrService: ToastrService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -47,13 +49,17 @@ export class AllOwnersComponent implements OnInit {
   getOwners(page: number): void{
     this.ownersDataService
       .getOwners(this.page)
-      .then(owners => {
-        this.owners = owners;
+      .then(response => {
+        this.owners = response;
         if (this.owners.length > 0) {
           this.availableOwners = true;
         } else {
           this.availableOwners = false;
+          this.toastrService.error('No owners available!')
         }
+      })
+      .catch(err=> {
+        this.toastrService.error(err || 'Sorry but unknown failure occured!');
       })
   }
 }

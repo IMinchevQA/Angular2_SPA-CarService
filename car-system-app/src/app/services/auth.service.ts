@@ -1,9 +1,16 @@
 import { Injectable } from '@angular/core';
+import { Http, Headers } from '@angular/http';
 
 @Injectable()
 export class AuthService {
   saveUser (user) {
     window.localStorage.setItem('user', JSON.stringify(user));
+  }
+
+  setName(name) {
+    let currentUser = this.getUser();
+    currentUser.name = name;
+    this.saveUser(currentUser)
   }
 
   getUser () {
@@ -33,4 +40,21 @@ export class AuthService {
   getToken () {
     return window.localStorage.getItem('token');
   }
+
+  getHeaders () {
+    let requestHeaders = new Headers ({
+      'Content-Type': 'application/json'
+    })
+    
+    return this.applyAuthorizationHeader(requestHeaders);
+  }
+
+  applyAuthorizationHeader (requestHeaders) {
+    if (this.isUserAuthenticated()) {
+      requestHeaders.set('Authorization', `bearer ${this.getToken()}`);
+      return requestHeaders;
+    }
+    requestHeaders.set('Authorization', '');    
+    return requestHeaders; 
+  } 
 }

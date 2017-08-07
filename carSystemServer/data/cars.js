@@ -1,7 +1,7 @@
-// const cars = {}
-// let currentId = 0
-module.exports = {
+module.exports = {    
   updateCar: (car, id) => {
+    let carId = id - 1
+    let commentsUpdatedCar = cars.find(car => Number(car.id === carId)).comments
     let updatedCar = {
       id,
       make: car.make,
@@ -11,10 +11,11 @@ module.exports = {
       engine: car.engine,
       price: car.price,
       owner: car.owner,
+      comments: commentsUpdatedCar,
       date: Date.now() + id
     }
-    cars[id-1] = updatedCar
-    return cars[id-1]
+    cars[carId] = updatedCar
+    return cars[carId]
   },
   save: (car) => {
   let id = cars.length + 1;
@@ -69,7 +70,20 @@ module.exports = {
       .reviews
       .sort((a, b) => b.createdOn - a.createdOn)
       .slice(0)
+  },
+  createComment: (commentBody, id) => {
+  let commentCar = cars[id-1]
+  let commentId = commentCar.comments.length + 1
+  let comment = {
+    id: commentId,
+    title: commentBody.title,
+    content: commentBody.content,
+    author: commentBody.author,
+    createdOn: Date.now() + id
   }
+  commentCar.comments.push(comment)
+  return commentCar
+}
 }
 let cars = [
   {

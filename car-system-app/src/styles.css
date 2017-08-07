@@ -1,3 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~bootstrap/dist/css/bootstrap.css';
 @import '../node_modules/toastr/build/toastr.css';
+
+a.active {
+  font-size: 1.5em;
+}
+
+div.car-comments { 
+  margin-top: 15px;
+}
+
+div.car-nocomments {
+  color: red;
+  font-size: 1.5em;
+  font-style: italic;
+}
+
+th.row-title {
+  padding-bottom: 10px;
+}
+
+td.row-content{
+  padding-left: 10px;
+}
