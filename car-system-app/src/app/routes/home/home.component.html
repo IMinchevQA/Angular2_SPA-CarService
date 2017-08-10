@@ -1,11 +1,11 @@
 <h1>HOME</h1>
-<div class="cars-block" *ngIf="cars"> 
+<div class="cars-block" *ngIf="cars|async"> 
   <ul>
-    <li *ngFor="let car of cars"> 
-      <p><strong>Make: </strong>{{car.make}}</p>
-      <p><strong>Model: </strong>{{car.model}}</p>          
-      <p><img src={{car.image}}/></p>
-      <a href="/cars/details/{{car.id}}">Details</a>
+    <li *ngFor="let car of (cars|async)"> 
+      <p><strong>Make: </strong>{{car?.make}}</p>
+      <p><strong>Model: </strong>{{car?.model}}</p>          
+      <p><img src={{car?.image}}/></p>
+      <!-- <a href="/cars/details/{{car.id}}">Details</a> -->
       <p>
       </p>
     </li>

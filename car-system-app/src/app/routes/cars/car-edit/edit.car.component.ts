@@ -5,18 +5,25 @@ import { Location } from '@angular/common'
 import { CarsService } from '../../../services/cars.service';
 import { AuthService } from '../../../services/auth.service';
 import { ToastrService } from '../../../services/common/toastr.service';
+import { CarActions } from '../../../actions/cars.actions';
+import { Observable } from 'rxjs/Observable';
+import { select } from 'ng2-redux';
 
 @Component({
   templateUrl: './eidt.car.component.html'
+  // template: '<h1>CAR EDIT</h1>'
 })
 export class EditCarComponent {
   car = new CarModel('', 0, '', '', '', '', '', '', '', []);
+  @select('car') carDetails: Observable<Array<CarModel>>;
+  formCar: Object = {};
   paramId: string;
   paramPage: string;
   constructor (
-    private carsDataService: CarsService,
     private route: ActivatedRoute,
     private router: Router,
+    private carActions: CarActions,
+    private carsDataService: CarsService,
     private auth: AuthService,
     private location: Location,
     private toastrService: ToastrService
@@ -26,44 +33,28 @@ export class EditCarComponent {
    }
 
   ngOnInit(): void {
-    this.carsDataService
-      .getCarDetails(this.paramId)
-      .then(car => {
-        if (car.id) {
-          this.car = car;
-        } else {
-          this.toastrService.error('No car available with this id!')
+    this.carActions.getCarDetails(this.paramId);    
+    this.carDetails.subscribe(result => {
+      if (result !== undefined && result !== null) {
+        Object.keys(result).forEach(key => {
+        if (key !== undefined && key !== undefined) {
+          this.formCar[key] = result[key]
         }
       })
+      }
+    }) 
   }
 
   editCar(formValues) {
-    if (formValues.price < 1000) {
-      this.toastrService.error('Price cannot be lower than 1000USD');
-    } else {
-      formValues.id = this.car.id;
-      formValues.owner = this.car.owner;
-      this.carsDataService
-      .updateCar(formValues)
-      .then(data => {
-        if (data.success) {
-            this.toastrService.success(data.message);
-            this.router.navigate([`/cars/details/${this.paramPage}/${this.paramId}`]);      
-          } else {
-            this.toastrService.error(data.message);
-          }
-      })
-      .catch(err=> {
-        this.toastrService.error(err || 'Sorry but unknown failure occured!');
-      })
-    }
+    this.carActions.editCar(
+      formValues, 
+      this.paramId,      
+      this.formCar['owner'], 
+      this.formCar['comments'],
+      this.paramPage)
   }
 
   goBack() {
     this.router.navigate([`/cars/details/${this.paramPage}/${this.paramId}`])
-  }
-
-  validatePrice(price) {
-      console.log('here')
   }
 }

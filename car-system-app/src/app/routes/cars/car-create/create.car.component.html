@@ -1,4 +1,6 @@
 <h1>Create Car</h1>
+<img src="{{imageUrl}}" style="margin: 0 auto; width: 200px; margin-bottom:30px" alt="" class="img-rounded img-responsive"
+        name="imageUrl" />
 <form style="margin: 0 auto;width: 50%;" #createCarForm="ngForm" (ngSubmit)="createCar(createCarForm.value)" autocomplete="on">
   <div class="form-group row">
     <label for="make" class="col-md-3 col-form-label">Make</label>
@@ -25,7 +27,7 @@
   <div class="form-group row">
     <label for="image" class="col-md-3 col-form-label">Image</label>
     <div class="col-md-6">
-      <input (ngModel)="image" id="image" class="form-control" type="text" name="image" required #image="ngModel">      
+      <input [(ngModel)]="imageUrl" id="image" class="form-control" type="text" name="image" required #image="ngModel">      
     </div>
   </div>
   <div *ngIf="image.errors && (image.durty || image.touched)" calss="alert alert-danger">

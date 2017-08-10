@@ -18,7 +18,6 @@ export class UserService {
         .post(registerUrl, postUser,  { headers: this.authService.getHeaders() })
         .toPromise()
         .then(response => {
-          console.log(response.json());
           return response.json();
         })
         .catch(err => this.handleError(err))

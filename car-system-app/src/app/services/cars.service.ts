@@ -3,7 +3,8 @@ import { Http, Headers} from '@angular/http';
 import { AuthService } from '../services/auth.service';
 import { CarModel } from '../models/car.model';
 import { CommentModel } from '../models/comment.model';
-import 'rxjs/add/operator/toPromise';
+import { Observable } from 'rxjs/Rx';
+import './rxjs-operators.js';
 const baseUrl: string = 'http://localhost:5000/cars'
 
 @Injectable()
@@ -14,78 +15,101 @@ export class CarsService
     private http: Http,
     private authService: AuthService) { }
 
-  updateCar(formValues) {
-    const idEditCar = formValues.id;    
+  updateCar(carData: FormData): Observable<CarModel> {
+    const idEditCar = carData['id'];    
     const urlEditCar = `${baseUrl}/edit/${idEditCar}`;
-    let postCar = JSON.stringify(formValues);
+    let postCar = JSON.stringify(carData);
     return this.http
       .put(urlEditCar, postCar, { headers: this.authService.getHeaders() })
-      .toPromise()
-      .then(response => response.json())
+      .map(resp => {
+        let parsedResp = JSON.parse(resp['_body'])
+        if (parsedResp.success === true) {
+          return {
+            message: parsedResp.message,
+            car: castCarToCarModel(parsedResp.payload)
+          }
+        }
+        throw new Error(parsedResp.message);
+      })
       .catch(err => this.handleError(err));
   }
 
-  createCar(formValues: FormData) {
+  createCar(formValues: FormData): Observable<CarModel> {
     const urlCreateCar = `${baseUrl}/create`
     let postCar = JSON.stringify(formValues);
     return this.http
     .post(urlCreateCar, postCar, { headers: this.authService.getHeaders() })
-    .toPromise()
-    .then(response => response.json())
+    .map(resp => {
+      debugger;
+      let parsedResp = JSON.parse(resp['_body'])
+        if (parsedResp.success === true) {
+          return {
+            message: parsedResp.message,
+            car: castCarToCarModel(parsedResp.payload)
+          }
+        }
+        throw new Error(parsedResp.message);
+      })
     .catch(err => this.handleError(err))
   }
 
-  getSixCars(): Promise<Array<CarModel>> {
+  getSixCars(): Observable<Array<CarModel>> {
     let urlGetSixCars = `${baseUrl}/getSixCars`;
     return this.http
       .get(urlGetSixCars, { headers: this.authService.getHeaders() })
-      .toPromise()
-      .then(resp => {
-        let resolveCars = JSON.parse(resp['_body']).map(car => {
-          return castCarToCarModel(car);
-        })        
-        return resolveCars;
-      })
-      .catch(err => err => this.handleError(err))
-  }
-
-  getCars(page: number): Promise<Array<CarModel>> {
-    let urlGetCars = `${baseUrl}/all?page=${page}`;
-    return this.http
-      .get(urlGetCars, { headers: this.authService.getHeaders() })
-      .toPromise()
-      .then(resp => {
-        let resolveCars = JSON.parse(resp['_body']).map(car => {
-          return castCarToCarModel(car);
-        })
-        return resolveCars;
+      .map(resp => {
+        let parsedResp = JSON.parse(resp['_body'])
+        if (parsedResp.success === true) {
+          let resolveCars = JSON.parse(resp['_body']).payload.map(car => castCarToCarModel(car))
+          return resolveCars;
+        }
+        throw new Error(parsedResp.message);    
       })
       .catch(err => this.handleError(err))
   }
 
-  getCarDetails(id: string): Promise<CarModel> {
+  getCars(page: number): Observable<Array<CarModel>> {
+    let urlGetCars = `${baseUrl}/all?page=${page}`;
+    return this.http
+      .get(urlGetCars, { headers: this.authService.getHeaders() })
+      .map(resp => {
+        let parsedResp = JSON.parse(resp['_body'])
+        if (parsedResp.success === true) {
+          let resolveCars = JSON.parse(resp['_body']).payload.map(car => castCarToCarModel(car))
+          return resolveCars;
+        }
+        throw new Error(parsedResp.message);        
+      })
+      .catch(err => this.handleError(err))
+  }
+
+  getCarDetails(id: string): Observable<CarModel> {
     let urlGetCarDetails = `${baseUrl}/details/${id}`;
     return this.http
-    .get(urlGetCarDetails, { headers: this.authService.getHeaders() })
-    .toPromise()
-    .then(car => {
-      return castCarToCarModel(JSON.parse(car['_body']));
-    })
-    .catch(err => this.handleError(err))
+      .get(urlGetCarDetails, { headers: this.authService.getHeaders() })
+      .map(resp => {
+        let parsedResp = JSON.parse(resp['_body'])
+        if (parsedResp.success === true) {
+          return castCarToCarModel(parsedResp.payload)
+        }
+        throw new Error(parsedResp.message);
+      })
+      .catch(err => this.handleError(err))
   }
   
-  createComment(commentBody: FormData, carId: string): Promise<CommentModel[]> {
+  addComment(commentBody: FormData, carId: string): Observable<CommentModel[]> {
     const urlCreateComment = `${baseUrl}/comments/${carId}`;
     let postComment = JSON.stringify(commentBody);
     return this.http
       .post(urlCreateComment, postComment, { headers: this.authService.getHeaders() })
-      .toPromise()
-      .then(resp => resp.json())
+      .map(resp => resp.json())
       .catch(err => this.handleError(err))
   }
   private handleError(error: any): Promise<any> {
-    console.error('An error occurred!', error); // for demo purposes only
-    return Promise.reject(error.message || error.statusText || error)
+    // console.error('An error occurred!', error); // for demo purposes only
+    let unknownErrorMessage = ('Error - connection refused, or some other problem occured!')
+    let message = error.message || error.statusText || unknownErrorMessage;
+    return Promise.reject(message);
   }
 }
 

@@ -1,19 +1,24 @@
 <h1>CAR DETAILS</h1>
-<div class='description-block' *ngIf="carDetails">
-  <p><img src={{carDetails.image}}/></p>
-  <p><strong>Make: </strong>{{carDetails.make}}</p>
-  <p><strong>Model: </strong>{{carDetails.model}}</p>          
-  <p><strong>Description: </strong>{{carDetails.description}}</p>
-  <p><strong>Owner: </strong>{{carDetails.owner}}</p>
-  <p><strong>Engine: </strong>{{carDetails.engine}}</p>
-  <p class="date-pipe"><strong>Date: </strong>{{carDetails.date | dateFormat}}</p>
-  <p><strong>Price: </strong>{{carDetails.price}}</p> 
+<div class='description-block' *ngIf="(carDetails|async)">
+  <p><img src={{(carDetails|async).image}}/></p>
+  <p><strong>Make: </strong>{{(carDetails|async).make}}</p>
+  <p><strong>Model: </strong>{{(carDetails|async).model}}</p>          
+  <p><strong>Description: </strong>{{(carDetails|async).description}}</p>
+  <p><strong>Owner: </strong>{{(carDetails|async).owner}}</p>
+  <p><strong>Engine: </strong>{{(carDetails|async).engine}}</p>
+  <p class="date-pipe"><strong>Date: </strong>{{(carDetails|async).date | dateFormat}}</p>
+  <p><strong>Price: </strong>{{(carDetails|async).price}} USD</p> 
   <button class="btn btn-primary" (click)="goBack()">Go Back</button>
-  <a class="btn btn-warning" routerLink="/cars/edit/{{paramPage}}/{{carDetails?.id}}">Car Edit</a>
-  <a class="btn btn-default" routerLink="/cars/comments/{{carDetails?.id}}">Leave a comment</a>
-  <h2>Comments</h2>
-    <table *ngIf="carDetails?.comments && carDetails.comments.length > 0" class="table table-striped table-responsive table-bordered">  
-      <tbody *ngFor="let comment of carDetails.comments"> 
+  <a class="btn btn-warning" routerLink="/cars/edit/{{paramPage}}/{{(carDetails|async)?.id}}">Car Edit</a>
+  <a class="btn btn-default" routerLink="/cars/comments/{{paramPage}}/{{(carDetails|async)?.id}}">Leave a comment</a>   
+  
+  <div *ngIf="((carDetails|async).comments?.length === 0)" class="car-comments car-nocomments">
+    <p>No comments available!</p>
+  </div> 
+  
+  <h2 *ngIf="(carDetails|async).comments?.length > 0" >Comments</h2>
+    <table *ngIf="(carDetails|async).comments?.length > 0" class="table table-striped table-responsive table-bordered">  
+      <tbody *ngFor="let comment of (carDetails|async).comments"> 
         <tr>
           <th>#{{comment.id}}<th>
         </tr>        
@@ -35,8 +40,5 @@
         </tr>
         <tr>----------------</tr>
       </tbody>    
-    <table> 
-  <div *ngIf="!carDetails?.comments || (carDetails?.comments && carDetails.comments.length === 0)" class="car-comments car-nocomments">
-    <p>No comments available!</p>
-  </div> 
+    <table>
 <div>

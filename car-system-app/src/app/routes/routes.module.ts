@@ -3,13 +3,15 @@ import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
+ 
+import { CarActions } from '../actions/cars.actions';
+import { OwnersActions } from '../actions/owners.actions';
 
 import { CarsService } from '../services/cars.service';
 import { OwnersService } from '../services/owners.service';
 import { UserService } from '../services/user.service';
 import { AuthService } from '../services/auth.service';
 import { ToastrService } from '../services/common/toastr.service';
-
 
 import { HomeComponent } from './../routes/home/home.component';
 import { CarDetailsComponent } from './cars/car-details/car.details.component';
@@ -32,11 +34,11 @@ const routes: Routes = [
   { path: '', component: HomeComponent } ,
   { path: 'cars',
     children: [
-      { path: 'all', component: AllCarsComponent, pathMatch: 'full' },
-      { path: 'create', component: CreateCarComponent },
       { path: 'details/:page/:id', component: CarDetailsComponent},
       { path: 'edit/:page/:id', component: EditCarComponent },
-      { path: 'comments/:id', component: CommentComponent } 
+      { path: 'comments/:page/:id', component: CommentComponent }, 
+      { path: 'all', component: AllCarsComponent, pathMatch: 'full' },
+      { path: 'create', component: CreateCarComponent },
     ]
   },
   { path: 'owners',
@@ -78,7 +80,7 @@ const routes: Routes = [
     CarDateFormatPipe
   ],
   imports: [HttpModule, CommonModule, RouterModule.forRoot(routes), FormsModule],
-  providers: [CarsService, OwnersService, UserService, AuthService, ToastrService],
+  providers: [OwnersActions, CarActions, CarsService, OwnersService, UserService, AuthService, ToastrService],
   exports: [RouterModule, NavbarComponent]
 })
 export class AppRoutesModule { }

@@ -8,15 +8,24 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './routes/home/home.component';
 import { AuthService } from './services/auth.service';
 
+import { NgReduxModule, NgRedux } from 'ng2-redux';
+import { store, IAppState } from './store'
+
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutesModule
+    AppRoutesModule,
+    NgReduxModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+  constructor (ngRedux: NgRedux<IAppState>) {
+    ngRedux.provideStore(store)
+  }
+  
+}

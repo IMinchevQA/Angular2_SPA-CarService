@@ -1,14 +1,14 @@
 <h1>ALL CARS</h1>
-<div *ngIf="!availableCars">
+<div *ngIf="!cars">
   <h2>No Cars Available</h2>
 </div>
 <div class='cars-block' *ngIf="cars">
   <h3>Choose sort criteria:</h3>
-  <button class="btn btn-danger" (click)="sortByMake()">By Make</button>
-  <button class="btn btn-warning" (click)="sortByOwner()">By Owner</button>
-  <button class="btn btn-primary" (click)="sortByDate()">By Date of creation</button>
-  <ul>
-    <li *ngFor="let car of cars">
+  <button class="btn btn-danger" name="make" (click)="sortCars(makeSortBtn.name)" #makeSortBtn>By Make</button>
+  <button class="btn btn-warning" name="owner" (click)="sortCars(ownerSortBtn.name)" #ownerSortBtn>By Owner</button>
+  <button class="btn btn-primary" name="date" (click)="sortCars(dateSortBtn.name)" #dateSortBtn>By Date of creation</button>
+  <ul class="all-cars">
+    <li *ngFor="let car of cars | async">
       <img src={{car.image}} alt={{car.model}}>
       <h3><strong>Car make: </strong>{{car.make}}</h3>
       <p><strong>Car model: </strong>{{car.model}}</p>

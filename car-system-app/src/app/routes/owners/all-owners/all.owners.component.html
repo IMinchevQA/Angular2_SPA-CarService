@@ -1,10 +1,10 @@
 <h1>ALL OWNERS</h1>
-<div *ngIf="!availableOwners">
+<div *ngIf="ownersLength == 0">
   <h2>No Owners Available</h2>
 </div>
-<div class='owners-block' *ngIf="availableOwners">
+<div class='owners-block' *ngIf="ownersLength > 0">
   <ul>
-    <li *ngFor="let owner of owners">
+    <li *ngFor="let owner of owners | async">
       <img src={{owner?.image}} alt={{owner?.name}}>
       <h3><strong>Owner name: </strong>{{owner?.name}}</h3>
       <p><a routerLink="/owners/{{page}}/{{owner.name}}/{{owner.id}}">Owner Details</a></p>
